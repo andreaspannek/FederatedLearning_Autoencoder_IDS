@@ -96,9 +96,10 @@ def _load_binary_info_by_src_ip(connection_file: str, binary_info_file: str, mal
         per_sha[row["filename"]] = values
 
     lookup = {}
-    for src_ip, sha in zip(conn["src_ip"], conn["sha256"]):
+    device_ip_col = "src_ip" if malicious_format else "dst_ip"
+    for device_ip, sha in zip(conn[device_ip_col], conn["sha256"]):
         if sha in per_sha:
-            lookup[src_ip] = per_sha[sha]
+            lookup[device_ip] = per_sha[sha]
     return lookup
 
 # Feature creation
@@ -199,10 +200,8 @@ def load_mono_dataset(partition_id: int, num_partitions: int):
 # "idle" and "routine" are left out
 DEVICE_SCENARIOS = {
     "laptop":         ["laptop_bridge_control", "laptop_light_control", "laptop_plug_control"],
-    "mobile":         ["mobile_bridge_control", "mobile_camera_view", "mobile_light_control",
-                        "mobile_panel_call", "mobile_plug_control", "mobile_wifi_toggle"],
-    "panel":          ["panel_bridge_control", "panel_camera_view", "panel_light_control",
-                        "panel_plug_control", "panel_power"],
+    "mobile":         ["mobile_bridge_control", "mobile_camera_view", "mobile_light_control", "mobile_panel_call", "mobile_plug_control", "mobile_wifi_toggle"],
+    "panel":          ["panel_bridge_control", "panel_camera_view", "panel_light_control", "panel_plug_control", "panel_power"],
     "bridge":         ["bridge_power", "bridge_update"],
     "hue":            ["hue_bridge_control", "hue_light_control", "diyHue_login_attempts"],
     "camera":         ["camera_power"],
@@ -237,7 +236,3 @@ def load_centralized_dataset():
         build_splits(benign, malicious)
     )
     return trainloader, validaton_loader, X_test_full, X_Validation, y_true, X_train_classifier, y_class
-
-#Todo
-
-# def load_cross_data()
