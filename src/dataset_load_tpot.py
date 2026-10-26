@@ -55,7 +55,7 @@ FEATURES = (
     + [f"binfo_{c}" for c in BINFO_NUMERIC_COLS]
     + [f"binfo_{c}" for c in BINFO_TEXT_COLS]
 )
-INPUT_DIM = len(FEATURES)  # 2 + 5 + 4 = 11
+INPUT_DIM = len(FEATURES)
 
 def url_hash(value) -> int:
     digest = hashlib.md5(str(value).encode("utf-8")).hexdigest()
