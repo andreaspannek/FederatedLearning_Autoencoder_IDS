@@ -11,9 +11,8 @@ Original: https://github.com/flwrlabs/flower/tree/main/examples/android
 getestet mit Python 3.9 mit `tensorflow-cpu==2.10.1`
 
 Ablauf:
-1.  in `tflite_convertor/`: `python convert_to_tflite.py`
-   (erzeugt `tflite_model`; die `.tflite`-Dateien nach `client/app/src/main/assets/model` kopieren).
-2. Im IDS-Projekt (Python 3.11): `python android/export_partitions.py`
-3. PC-Test (ohne Android und ohne Server): in `tflite_convertor/`
-   `python test_tflite.py tflite_model ../client/app/src/main/assets/data/partition_0_train.txt ../client/app/src/main/assets/data/partition_0_test.txt`
-   (Gerät 0 bis 9 für alle 10 Geräte)
+1. PC-Test (ohne Android und ohne Server): `python tflite_convertor/test_tflite.py`
+2. Optional, Modelle neu erzeugen: in `tflite_convertor/` `python convert_to_tflite.py`
+   (erzeugt `tflite_model`)
+3. Optional, Daten neu erzeugen (IDS-Projekt, Python 3.11): `python android/export_partitions.py`
+   (Zielordner `client/app/src/main/assets/data`).
