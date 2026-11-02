@@ -1,3 +1,6 @@
+import os
+import shutil
+
 import tensorflow as tf
 
 from tfltransfer import bases, heads, optimizers
@@ -40,3 +43,13 @@ converter = TFLiteTransferConverter(
     INPUT_DIM, base_path, heads.KerasModelHead(head), optimizers.SGD(1e-2), train_batch_size=32
 )
 converter.convert_and_save("tflite_model")
+
+# Copy the five models into the app's assets so the app and test_tflite.py can use them directly.
+assets_model = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "client", "app", "src", "main", "assets", "model"
+)
+os.makedirs(assets_model, exist_ok=True)
+for name in os.listdir("tflite_model"):
+    if name.endswith(".tflite"):
+        shutil.copy(os.path.join("tflite_model", name), os.path.join(assets_model, name))
+print("copied models to", os.path.normpath(assets_model))
