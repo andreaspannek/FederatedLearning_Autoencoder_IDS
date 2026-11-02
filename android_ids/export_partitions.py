@@ -1,12 +1,4 @@
-"""Exports the per-device T-Pot data for the Android app.
-
-Run with the Python environment of the IDS project (3.11). The script can live in the project root
-or in the android/ subfolder of FederatedLearning_Autoencoder_IDS; `src` is found either way:
-    python android/export_partitions.py
-The output folder defaults to client/app/src/main/assets/data next to this file. Another folder can be
-given as the first argument:
-    python android/export_partitions.py <other/output/folder>
-"""
+"""Exports the device T-Pot data for the Android app."""
 import os
 import sys
 

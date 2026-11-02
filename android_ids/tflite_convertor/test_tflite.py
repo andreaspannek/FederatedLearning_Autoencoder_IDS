@@ -1,15 +1,7 @@
 """Checks the TFLite models on the PC (no Android, no server needed).
 
-Runs the same steps as the Java client: initialize -> train_head (loss + gradients) -> optimizer,
-then evaluates the reconstruction error with the inference model. The models and the data
-partitions of the 10 devices are part of the repository, so this is all that has to be run:
-
     python test_tflite.py          # all 10 devices, prints a summary table at the end
-    python test_tflite.py 3        # only device 3
     python test_tflite.py <model_dir> <train_file> <test_file>   # explicit paths
-
-Run it with the Python 3.9 environment (tensorflow-cpu 2.10.1). Paths are relative to this file,
-so it can be started from any folder.
 """
 import os
 import sys
@@ -54,7 +46,7 @@ def test_device(model_dir, train_file, test_file):
 
     ytr, xtr = read(train_file)
     yte, xte = read(test_file)
-    xb = xtr[ytr == 0]  # the autoencoder only trains on benign rows (labelled 0)
+    xb = xtr[ytr == 0]  # the autoencoder only trains on benign rows
     n_mal = int((yte == 1).sum())
     print(f"train rows: {len(xtr)} (benign {len(xb)}), test rows: {len(xte)} (malicious {n_mal})")
     assert len(xb) >= batch, "fewer benign rows than the batch size"
@@ -72,9 +64,9 @@ def test_device(model_dir, train_file, test_file):
         losses = []
         for s in range(0, len(idx) - batch + 1, batch):
             b = xb[idx[s : s + batch]]
-            out = run(train, [b, b] + params)  # inputs: bottleneck, target, *params
+            out = run(train, [b, b] + params)
             losses.append(float(out[0]))
-            params = run(opt, params + out[1:])  # inputs: *params, *grads -> new params
+            params = run(opt, params + out[1:])
         if epoch % 5 == 0 or epoch == 29:
             print(f"epoch {epoch:2d}  loss {np.mean(losses):.5f}")
 
